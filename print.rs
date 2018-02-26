@@ -29,19 +29,16 @@ fn main() {
     // It will even check to make sure the correct number of arguments are
     // used.
     println!("My name is {0}, {1} {0}", "Bond", "James");
-    // FIXME ^ Add the missing argument: "James"
-
-    // Create a structure which contains an `i32`. Name it `Structure`.
-    #[allow(dead_code)]
-    struct Structure(i32);
-
-    // However, custom types such as this structure require more complicated
-    // handling. This will not work.
-    //println!("This struct `{}` won't print...", Structure(3));
-    // FIXME ^ Comment out this line.
-    //
-
 
     let pi = 3.141592;
-    println!("Pi is roughly {:.3}",pi);
+    // It seems one can use some `fprintf()` format specifiers from C.
+    println!("Pi is roughly {:.3}", pi);
+
+    // Structure is a user type.
+    // To debug print it, derive from the `trait` `fmt::Debug`.
+    #[derive(Debug)]
+    // Create a structure which contains an `i32`. Name it `Structure`.
+    struct Structure(i32);
+
+    println!("Debug printing is p-cool `{:?}`", Structure(3));
 }
