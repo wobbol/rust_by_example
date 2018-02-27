@@ -1,3 +1,6 @@
+
+use std::fmt;
+
 #[derive(Debug)]
 struct Structure(i32);
 
@@ -8,6 +11,13 @@ struct Deep(Structure);
 struct Person<'a> {
     name: &'a str,
     age: u8
+}
+
+impl fmt::Display for Structure {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        // `f` is the supplied output stream
+        write!(f, "{}", self.0)
+    }
 }
 
 fn main()
@@ -27,4 +37,5 @@ fn main()
     let peter = Person{name,age};
     println!("{:#?}",peter);
 
+    println!("regular printing? `{}`", Structure(3));
 }
