@@ -7,10 +7,10 @@
 //This code structure is lifted from http://mattgathu.github.io/simple-events-hook-rust/
 
 #[allow(unused_variables)]
-trait Events {
-    fn on_keyword(&self, s:&str) {}
+trait Event {
     fn on_message(&self, s:&str) {}
     fn on_post_message(&self, s:&str) {}
+    fn on_keyword(&self, s:&str) {}
     fn get_keyword(&self) -> &str { "" }
 }
 
@@ -27,7 +27,7 @@ impl Parrot {
     }
 }
 
-impl Events for Parrot {
+impl Event for Parrot {
     fn on_message(&self, s:&str)
     {
         println!("Parrot::on_message:   {}", s);
@@ -47,7 +47,7 @@ impl Events for Parrot {
 }
 struct Echo;
 
-impl Events for Echo {
+impl Event for Echo {
     fn on_message(&self, s:&str)
     {
         println!("Echo::on_message:     {:?}", s.split_at(1));
@@ -59,38 +59,39 @@ impl Events for Echo {
 }
 
 struct MessageHandler {
-    hooks: Vec<Box<Events>>,
+    hook: Vec<Box<Event>>,
 }
 
 impl MessageHandler {
     fn new() -> Self
     {
         Self {
-            hooks: Vec::new(),
+            hook: Vec::new(),
         }
     }
     // putting a lifetime here is very important since we are putting the type that implements the
     // Events trait into a Box<T>
     // TODO: figure out what the <...> means
     // TODO: figure out if using constrained types would work here
-    fn add_events_hook<E: Events + 'static>(&mut self, hook: E)
+    fn add_events_hook<E: Event + 'static>(&mut self, hook: E)
     {
+        //Box::new() is the magic sauce here, it lets us put data of unsized type E into a Vec.
         self.hooks.push(Box::new(hook));
     }
     fn handle(&self, s: &str)
     {
-        for hook in &self.hooks {
-            let key = hook.get_keyword();
+        for h in &self.hook {
+            let key = h.get_keyword();
             if !key.is_empty() && s.starts_with(key) {
-                hook.on_keyword(s);
+                h.on_keyword(s);
             }
         }
-        for hook in &self.hooks {
-            hook.on_message(s);
+        for h in &self.hook {
+            h.on_message(s);
         }
         // do some mystery stuff
-        for hook in &self.hooks {
-            hook.on_post_message(s);
+        for h in &self.hook {
+            h.on_post_message(s);
         }
     }
 }
