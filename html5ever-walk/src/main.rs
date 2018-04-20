@@ -1,3 +1,9 @@
+//I could not have written this without this example.
+//The example code I used as a guide here:
+//https://github.com/servo/html5ever/blob/master/html5ever/examples/print-rcdom.rs
+//has a really clean style. I hope I can incorporate some of these
+//structures into my future code.
+
 #[macro_use] extern crate html5ever;
 
 use html5ever::{ParseOpts, parse_document};
