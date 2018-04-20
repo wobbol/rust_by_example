@@ -1,0 +1,10 @@
+[package]
+name = "html5ever-walk"
+version = "0.1.0"
+authors = [
+	"The html5ever Project Developers",
+	"Nicole Fontenot <nfontenot27@gmail.com>",
+]
+
+[dependencies]
+html5ever = "0.22"
