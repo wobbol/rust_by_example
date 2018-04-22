@@ -14,6 +14,7 @@ use html5ever::tree_builder::TreeBuilderOpts;
 use html5ever::rcdom::{RcDom, Handle, NodeData};
 use html5ever::tendril::TendrilSink;
 use std::ops::Deref;
+use std::io;
 
 fn get_attr(data :&NodeData, attribute: &str) -> Result<String, ()>
 {
@@ -108,11 +109,11 @@ fn main() {
         }
     };
 
-     let res_content = String::from(r#" <!DOCTYPE html><!-- hmmmm --> <html> <body> <h1 id="goodboy" style="display: none"></h1><div id = "content"><iframe src = "https://alink.com" id = "specal_link"></iframe></div> </body> </html>"#);
-    let dom: RcDom = parse_document(RcDom::default(), opts).from_utf8().read_from(&mut res_content.as_bytes()).unwrap();
+    let stdin = io::stdin();
+    let dom: RcDom = parse_document(RcDom::default(), opts).from_utf8().read_from(&mut stdin.lock()).unwrap();
     print_tree(0, dom.document.clone());
-    let id = "goodboy";
-    let attribute = "style";
+    let id = "pdf";
+    let attribute = "src";
      match find_id_in_tree(dom.document, id, attribute) {
         Ok(s) => {
             println!(r#"the first element with id="{}" has {}="{}""#, id, attribute, s);
