@@ -111,14 +111,14 @@ fn main() {
 
     let stdin = io::stdin();
     let dom: RcDom = parse_document(RcDom::default(), opts).from_utf8().read_from(&mut stdin.lock()).unwrap();
-    print_tree(0, dom.document.clone());
+    //print_tree(0, dom.document.clone());
     let id = "pdf";
     let attribute = "src";
      match find_id_in_tree(dom.document, id, attribute) {
         Ok(s) => {
-            println!(r#"the first element with id="{}" has {}="{}""#, id, attribute, s);
+            print!("{}", s);
         },
-        Err(_) => println!("hmmmmmmmmm"),
+        Err(_) => panic!(),
     };
 }
 
